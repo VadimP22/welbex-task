@@ -1,0 +1,12 @@
+{
+  "name": "welbex-task",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dependencies": "npm --prefix backend install",
+    "build": "npm --prefix backend run build && docker build ."
+  },
+  "author": "Vadim Petrov",
+  "license": "ISC"
+}
