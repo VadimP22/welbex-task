@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dependencies": "npm --prefix backend install",
-    "build": "npm --prefix backend run build",
+    "dependencies": "npm --prefix backend install && npm --prefix frontend install",
+    "build": "npm --prefix backend run build && npm --prefix frontend run build",
     "dockerize": "docker build -t webex-task-backend ."
   },
   "author": "Vadim Petrov",

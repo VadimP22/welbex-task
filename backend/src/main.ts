@@ -1,5 +1,5 @@
 import express from "express"
-import { Pool } from "pg";
+import path from "path";
 import { parseQueryParams } from "./parse-query-params";
 import { ConfigurationService } from "./services/configuration-service";
 import { DatabaseCreationService } from "./services/database-creation-service";
@@ -9,6 +9,8 @@ import { TableService } from "./services/table-service";
 
 
 const app = express()
+app.use(express.static(path.join(__dirname, 'build')));
+
 const configurationService = new ConfigurationService()
 const databaseCreationService = new DatabaseCreationService(configurationService)
 const postgreService = new PostgreService(configurationService, databaseCreationService)
@@ -34,23 +36,10 @@ app.get("/api/v1", async (req, res) => {
     
 })
 
-app.get("/", async (req, res) => {
-    try {
-        await postgreService.query("CREATE TABLE Foo(id INT)")
-    }
-    catch {}
-    res.send({string: "HTML will be there"})
-})
 
-app.get("/js", async (req, res) => {
-    res.send("Js will be there")
-})
-
-app.get("/css", async (req, res) => {
-    res.send("CSS will be there")
-})
-
-
+app.get('/', function (req, res) {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 app.listen(8088, () => {
     console.log("INFO: App is listening on port 8088")

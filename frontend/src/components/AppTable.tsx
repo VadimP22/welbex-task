@@ -21,6 +21,8 @@ export function AppTable(props: any) {
     let [isSortOrderIncrease, setIsSortOrderIncrease] = useState<boolean>(true)
     let [isPlaceholderVisible, setPlaceholderVisibility] = useState<boolean>(true)
 
+    let [inputTimeout, setInputTimeout] = useState<NodeJS.Timeout>()
+
     let [filterType, setFilterType] = useState<string>("none")
     let filterTypeItems: Array<MenuItem> = [
         {key: "none", value: "Выключить"},
@@ -37,11 +39,13 @@ export function AppTable(props: any) {
         {key: "distance", value: "Расстояние"},
     ]
 
+    let [value, setValue] = useState<string>("")
+
     let placeholderClassAddition = " hidden"
     if (isPlaceholderVisible) { placeholderClassAddition = "" }
 
     useEffect(() => {
-        fetch("api/v1?page=" + page + "&sortColumn=" + sortColumn + "&sortOrder=" + stringifySortOrder(isSortOrderIncrease) + "&filterType=" + filterType + "&filterColumn=" + filterColumn).then((result) => {
+        fetch("api/v1?page=" + page + "&sortColumn=" + sortColumn + "&sortOrder=" + stringifySortOrder(isSortOrderIncrease) + "&filterType=" + filterType + "&filterColumn=" + filterColumn + "&value=" + value).then((result) => {
             setPlaceholderVisibility(true)
             if (result.ok) {
                 result.json().then((obj) => {
@@ -50,16 +54,23 @@ export function AppTable(props: any) {
                 })
             }
         })
-    }, [page, sortColumn, isSortOrderIncrease, filterType, filterColumn])
+    }, [page, sortColumn, isSortOrderIncrease, filterType, filterColumn, value])
     // <DropDownMenu visible={true} items={[{key: "key1", value: "value1"}, {key: "key2", value: "value2"}]} onClick={(key: any) => {console.log(key)}}/>
 
     return (
-        <div className="">
+        <div className="min-w-[600px]">
             <div className="my-[20px] flex justify-between">
                 <DropDown onSelect={(key: string) => {setFilterColumn(key)}} items={filterColumnItems}>Столбец</DropDown>
                 <DropDown onSelect={(key: string) => {setFilterType(key)}} items={filterTypeItems}>Тип фильтра</DropDown>
+                <input placeholder="Значение..."
+                    className="px-8 outline-none border border-slate-300 rounded-lg placeholder-slate-300 focus:border-slate-900 text-slate-500"
+                    onInput={(input: any) => {
+                        clearTimeout(inputTimeout)
+                        let timeout = setTimeout(() => {setValue(input.target.value)}, 500)
+                        setInputTimeout(timeout)
+                }}></input>
             </div>
-            <table className="min-w-[600px] w-full text-left h-[500px]">
+            <table className="min-w-[600px] w-full text-left">
                 <AppTableHeader sortColumn={sortColumn} setSortColumn={setSortColumn} isSortOrderIncrease={isSortOrderIncrease} setIsSortOrderIncrease={setIsSortOrderIncrease} />
                 <AppTableBody items={items} />
             </table>
