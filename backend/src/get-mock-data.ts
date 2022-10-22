@@ -10,6 +10,16 @@ function generateTwoDigitNumber(): number {
     return num
 }
 
+function randomString(length: number) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
 export function getMockData(count: number): Array<TableItem> {
     let data: TableItem
     let array: Array<TableItem> = []
@@ -19,7 +29,7 @@ export function getMockData(count: number): Array<TableItem> {
             count: Math.floor(Math.random() * 1000),
             date: "20" + generateTwoDigitNumber() + "-04-30", 
             distance: Math.floor(Math.random() * 1000), 
-            name: Math.floor(Math.random() * 1000).toString()
+            name: randomString(10)
         }
 
         array.push(data)

@@ -1,7 +1,7 @@
 FROM node
 WORKDIR /app
 COPY ./backend ./
-COPY ./frontend/build ./
+COPY ./frontend/build ./src/build
 
 EXPOSE 8088
 
