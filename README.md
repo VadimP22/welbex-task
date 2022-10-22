@@ -6,9 +6,21 @@ docker, npm
 
 ```
 git clone https://github.com/VadimP22/welbex-task.git
+```
+
+```
 cd welbex-task
+```
+
+```
 npm run dependencies
+```
+
+```
 npm run build
+```
+
+```
 npm run dockerize
 ```
 
