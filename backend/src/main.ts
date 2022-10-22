@@ -25,8 +25,9 @@ app.get("/api/v1", async (req, res) => {
 
     try {
         let result = await frontendRequestExecutorService.execute(frontendRequest)
-        res.send(result)
+        res.send({rows: result})
     } catch (e) {
+        console.log("ERROR: ", e)
         res.status(404)
         res.send(e)
     }

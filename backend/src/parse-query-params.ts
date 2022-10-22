@@ -31,7 +31,7 @@ export function parseQueryParams(params: any): FrontendRequest {
         }
     } 
 
-    if  (params.filterType !== undefined && params.filterColumnt !== undefined && params.value !== undefined) {
+    if  (params.filterType !== undefined && params.filterColumn !== undefined && params.value !== undefined) {
         if (filterTypeValues.includes(params.filterType) && columnTypeValues.includes(params.filterColumn)) {
             filterType = params.filterType
             filterColumn = params.filterColumn

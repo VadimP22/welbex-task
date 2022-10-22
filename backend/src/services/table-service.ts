@@ -35,6 +35,7 @@ export class TableService {
             }
         }
     }
+    
     private async unsafeInsert(item: TableItem) {
         await this.postgreService.query("INSERT INTO AppTable(date, name, count, distance) VALUES ('" + item.date + "','" + item.name + "'," + item.count + "," + item.distance + ")")
     }
@@ -44,9 +45,16 @@ export class TableService {
         await this.unsafeInsert(item)
     }
 
-    async get(page: number) {
+    async get(page: number, sortColumn: string, sortOrder: string) {
         await this.checkTableCreated()
-        let rows = (await this.postgreService.query("SELECT * FROM AppTable ORDER BY date")).rows
+
+        let sqlOrder: string = "ASC"
+
+        if (sortOrder == "decrease") {
+            sqlOrder = "DESC"
+        }
+
+        let rows = (await this.postgreService.query("SELECT * FROM AppTable ORDER BY " + sortColumn + " " + sqlOrder)).rows
         let result: Array<any> = []
 
         for (let i = 0; i < rows.length; i++) {
@@ -56,5 +64,53 @@ export class TableService {
         }
 
         return result
+    }
+
+    async getFiltered(page: number, sortColumn: string, sortOrder: string, filterType: string, filterColumn: string, value: any) {
+        await this.checkTableCreated()
+
+        if (filterType != "contains") {
+            let sqlOrder: string = "ASC"
+            let filterOperator = "="
+
+            if (sortOrder == "decrease") {
+                sqlOrder = "DESC"
+            }
+
+            if (filterType == "greater") {
+                filterOperator = ">"
+            } else if (filterType == "less") {
+                filterOperator = "<"
+            }
+
+            let rows = (await this.postgreService.query("SELECT * FROM AppTable WHERE " + filterColumn + filterOperator + "'" + value + "'" + " ORDER BY " + sortColumn + " " + sqlOrder)).rows
+            let result: Array<any> = []
+
+            for (let i = 0; i < rows.length; i++) {
+                if (i >= page * 10 && i < (page * 10) + 10) {
+                    result.push(rows[i])
+                }
+            }
+
+            return result
+        } else {
+            let sqlOrder: string = "ASC"
+
+            if (sortOrder == "decrease") {
+                sqlOrder = "DESC"
+            }
+
+
+            let rows = (await this.postgreService.query("SELECT * FROM AppTable WHERE " + "position('"+ value +"' in " + filterColumn + ")>0" + " ORDER BY " + sortColumn + " " + sqlOrder)).rows
+            let result: Array<any> = []
+
+            for (let i = 0; i < rows.length; i++) {
+                if (i >= page * 10 && i < (page * 10) + 10) {
+                    result.push(rows[i])
+                }
+            }
+
+            return result
+        }
     }
 }

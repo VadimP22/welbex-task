@@ -22,14 +22,14 @@ export class ConfigurationService {
 
     getDbPort(): number {
         if (process.env.PG_PORT === undefined) {
-            return 49154
+            return 49153
         }
 
         try {
             return parseInt(process.env.PG_PORT)
         } catch {
             console.log("Error while parsing PG_PORT!")
-            return 49154
+            return 49153
         }
     }
 
