@@ -13,7 +13,7 @@ npm run dockerize
 # Как запустить?
 
 ```
-docker compose run
+docker compose up
 ```
 
 # Как посмотреть?

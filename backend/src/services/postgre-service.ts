@@ -1,4 +1,4 @@
-import { Client, QueryResult } from "pg";
+import { Client, Pool, QueryResult } from "pg";
 import { ConfigurationService } from "./configuration-service";
 import { DatabaseCreationService } from "./database-creation-service";
 
@@ -32,10 +32,12 @@ export class PostgreService {
                 this.isConnected = true
             }
             catch (e) {
-                console.log("Error! Can't connect to database! ", e)
+                console.log("FATAL: Can't connect to database! ", e)
+                process.exit(1)
             }
         }
 
+        console.log("DEBUG: executing " + query)
         return await this.client.query(query)
     }
 }

@@ -1,0 +1,18 @@
+version: "3.9"
+services:
+  backend:
+    image: "webex-task-backend"
+    ports:
+      - "8088:8088"
+    environment:
+      - PG_HOST=postgres
+      - PG_PORT=5432
+      - PG_USERNAME=postgres
+      - PG_PASSWORD=password
+      - PG_DB=app_db
+  postgres:
+    image: "postgres"
+    ports:
+    - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: password
